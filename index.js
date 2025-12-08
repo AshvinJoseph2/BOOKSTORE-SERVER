@@ -4,7 +4,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const router = require('./routes/router')
-
+require('./config/db')
 // create a express server using express
 const bookstoreServer = express()
 // enable cors in server
