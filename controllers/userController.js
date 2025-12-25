@@ -72,5 +72,33 @@ exports.googleLoginController = async (req,res)=>{
 
 }
 
-// user profile edit
+// user profile edit- authorised user
+exports.userProfileUpdateController = async (req,res)=>{
+console.log("inside userProfileUpdateController");
+// get user details
+const email = req.payload
+const {id} = req.params
+const {username,password,bio,role,picture} = req.body
+const updatePicture = req.file?req.file.filename:picture
+console.log(id,email,username,password,bio,role,updatePicture);
+try{
+const updateUser = await users.findByIdAndUpdate({_id:id},{username,email,password,picture:updatePicture,bio,role},{new:true})
+res.status(200).json(updateUser)
+}catch(error){
+    console.log(error);
+    res.status(500).json(error)
+}
+}
+// all user
+exports.allUserController = async(req,res)=>{
+    console.log("Inside allUserController");
+    try{
+    const allUser = await users.find({role:{$ne:"admin"}})
+    res.status(200).json(allUser)
+    }catch(err){
+        console.log(err);
+        res.status(500).json(err)
+    }
+}
+
 // admin profile edit

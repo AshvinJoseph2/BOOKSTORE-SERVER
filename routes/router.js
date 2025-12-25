@@ -3,6 +3,7 @@ const userController = require('../controllers/userController')
 const bookController = require('../controllers/bookController')
 const jwtMiddleware = require('../middlewares/jwtMiddleware')
 const multerMiddleware = require('../middlewares/multerMiddleware')
+const adminMiddleware = require('../middlewares/adminMiddleware')
 
 const router = new express.Router()
 
@@ -20,5 +21,23 @@ router.get('/home/books',bookController.getHomeBookController)
 
 // add book - request body in formdata,header should has token
 router.post('/user/add/book',jwtMiddleware,multerMiddleware.array('uploadImg'),bookController.addBookController)
+// all book
+router.get('/all-books',jwtMiddleware,bookController.getUserAllBookController)
+// user book
+router.get('/user-books',jwtMiddleware,bookController.getUserProfileBooksController)
+// bought book
+router.get('/user-books/bought',jwtMiddleware,bookController.getUserBoughtBooksController)
+// edit user
+router.put('/user/:id/edit',jwtMiddleware,multerMiddleware.single('picture'),userController.userProfileUpdateController)
+// view book
+router.get('/books/:id/view',jwtMiddleware,bookController.viewBookController)
+
+// -------------------------Role : Admin------------------------
+
+// all admin books
+router.get('/books/all',adminMiddleware,bookController.getAllBooksController)
+// all user
+router.get('/users/all',adminMiddleware,userController.allUserController)
+
 
 module.exports = router

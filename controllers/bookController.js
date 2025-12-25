@@ -42,7 +42,69 @@ exports.getHomeBookController = async (req,res)=>{
 }
 
 // get userallBookpages books - authorised user
+exports.getUserAllBookController = async (req,res)=>{
+    console.log("Inside getUserAllBookController");
+    const searchKey = req.query.search
+    console.log(searchKey);
+    
+    const loginUserMail = req.payload
+    try{
+        const allBooks = await books.find({sellerMail:{$ne:loginUserMail},title:{$regex:searchKey,$options:'i'}})
+        res.status(200).json(allBooks)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    } 
+}
 
 // get useruploads books - authorised user
+exports.getUserProfileBooksController = async (req,res)=>{
+    console.log("Inside getUserProfileBooksController");
+    const loginUserMail = req.payload
+    try{
+        const userBooks = await books.find({sellerMail:loginUserMail})
+        res.status(200).json(userBooks)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    }  
+}
 
 // get user bought books - authorised user
+exports.getUserBoughtBooksController = async (req,res)=>{
+    console.log("Inside getUserBoughtBooksController");
+    const loginUserMail = req.payload
+    try{
+        const userBooks = await books.find({buyerMail:loginUserMail})
+        res.status(200).json(userBooks)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    }  
+}
+
+// get a single book details
+exports.viewBookController = async (req,res)=>{
+    console.log("Inside viewBookController");
+    const {id} = req.params
+    try{
+        const userBooks = await books.findById({_id:id})
+        res.status(200).json(userBooks)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    }  
+}
+
+// get all books
+exports.getAllBooksController = async (req,res)=>{
+    console.log("Inside getAllBooksController");
+    try{
+        const allBooks = await books.find()
+        res.status(200).json(allBooks)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    } 
+}
+
